@@ -1,0 +1,101 @@
+import React from "react";
+
+type StageId = `${number}-${number}`;
+
+const WORLDS = [
+  { id: 1, name: "1年生のくに（前半）" },
+  { id: 2, name: "いきものの森" },
+  { id: 3, name: "からだ＆きもち" },
+  { id: 4, name: "とき・きせつ" },
+  { id: 5, name: "さいごのとう" },
+];
+
+const STAGES_PER_WORLD = 5;
+
+const App: React.FC = () => {
+  const [currentStage, setCurrentStage] = React.useState<StageId | null>(null);
+
+  const handleSelectStage = (worldId: number, stageNo: number) => {
+    const id = `${worldId}-${stageNo}` as StageId;
+    setCurrentStage(id);
+  };
+
+  const handleBackToMap = () => {
+    setCurrentStage(null);
+  };
+
+  return (
+    <div style={{ fontFamily: "system-ui, sans-serif", padding: "16px" }}>
+      <h1>漢字クエスト 1年生</h1>
+
+      {!currentStage && (
+        <>
+          <p>ステージをえらんで ぼうけんに でかけよう！</p>
+
+          {WORLDS.map((world) => (
+            <div
+              key={world.id}
+              style={{
+                marginBottom: "16px",
+                padding: "12px",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+              }}
+            >
+              <h2>
+                ワールド {world.id}: {world.name}
+              </h2>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                {Array.from({ length: STAGES_PER_WORLD }).map((_, index) => {
+                  const stageNo = index + 1;
+                  return (
+                    <button
+                      key={stageNo}
+                      style={{
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        border: "1px solid #888",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => handleSelectStage(world.id, stageNo)}
+                    >
+                      {world.id}-{stageNo}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+
+      {currentStage && (
+        <div
+          style={{
+            marginTop: "16px",
+            padding: "16px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+          }}
+        >
+          <h2>ステージ {currentStage}</h2>
+          <p>※ここに「漢字バトル画面」をあとで作り込む。</p>
+          <button
+            onClick={handleBackToMap}
+            style={{
+              marginTop: "12px",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              border: "1px solid #888",
+              cursor: "pointer",
+            }}
+          >
+            マップにもどる
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
